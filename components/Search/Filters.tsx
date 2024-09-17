@@ -1,0 +1,93 @@
+import React from 'react'
+
+const Filters = () => {
+  return (
+    <div className='w-[250px] p-6 grid-filters border-r border-r-300 h-[calc(100vh-120px)] sticky top-[110px] overflow-y-auto'>
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+      Filters
+    </div>
+  )
+}
+
+export default Filters
