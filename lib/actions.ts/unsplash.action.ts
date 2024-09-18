@@ -62,13 +62,13 @@ export const getUnsplashDownloadUrl = async (photoId: string) => {
       }
     );
     if (!response.ok) {
-      throw new Error("Failed to download photo");
+      throw new Error("Failed to download Unsplash  photo");
     }
     const data = await response.json();
 
     return data.url;
   } catch (error) {
-    console.error("Error downloading photo", error);
-    throw new Error("Failed to download photo");
+    console.error("Error downloading Unsplash photo", error);
+    throw new Error("Failed to download Unsplash photo");
   }
 };

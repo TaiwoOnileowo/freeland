@@ -14,6 +14,14 @@ const nextConfig = {
         protocol: "https",
         hostname: "www.pexels.com",
       },
+      {
+        protocol: "https",
+        hostname: "www.freepik.com"
+      },
+      {
+        protocol: "https",
+        hostname: "img.b2bpic.net"
+      },
     ],
   },
   reactStrictMode: false,
