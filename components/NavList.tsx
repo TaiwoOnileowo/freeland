@@ -32,7 +32,7 @@ const NavList = () => {
         <li key={index} className="group relative">
           <Link
             href={item.url}
-            className="hover:cursor-default hover:opacity-60"
+            className="hover:cursor-default hover:opacity-60 py-6"
             onClick={(e) => e.preventDefault()}
           >
             {item.title}

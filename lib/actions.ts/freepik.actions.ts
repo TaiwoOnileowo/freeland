@@ -4,20 +4,45 @@ const freepikApiKey = process.env.FREELAND_FREEPIK_API_KEY;
 if (!freepikApiKey) {
   throw new Error("Missing Freepik API key");
 }
+interface FreepikPhoto {
+  id: string;
+  title: string;
+  image: {
+    source: {
+      size: string;
+      url: string;
+    };
+  };
+  author: {
+    name: string;
+    avatar: string;
+  };
+}
 
-export const getFreepikDownloadUrl = async (photoId: string) => {
+export const getFreepikDownloadUrl = async (photoId: number) => {
   try {
     const response = await fetch(
       `https://api.freepik.com/v1/resources/${photoId}/download`,
       {
         headers: {
           "x-freepik-api-key": freepikApiKey,
+          "Accept-Language": "en-US",
         },
       }
+    );
+    const responseData = await response.json();
+    console.log(
+      responseData,
+      "response",
+      freepikApiKey,
+      "freepikApiKey",
+      photoId,
+      "photoId"
     );
     if (!response.ok) {
       throw new Error("Failed to Freepik download photo");
     }
+
     const data = await response.json();
 
     return data.data.url;
@@ -31,15 +56,15 @@ export const getFreepikPhotos = async ({
   page,
   perPage,
   signal,
-  searchTerm,
+  query,
 }: {
   page: number;
   perPage: number;
   signal?: AbortSignal;
-  searchTerm?: string;
+  query?: string;
 }) => {
-  const freepikUrl = searchTerm
-    ? `https://api.freepik.com/v1/resources?limit=${perPage}&page=${page}&term=${searchTerm}`
+  const freepikUrl = query
+    ? `https://api.freepik.com/v1/resources?limit=${perPage}&page=${page}&term=${query}order=relevance`
     : `https://api.freepik.com/v1/resources?limit=${perPage}&page=${page}`;
   try {
     const response = await fetch(freepikUrl, {
@@ -51,23 +76,8 @@ export const getFreepikPhotos = async ({
     if (!response.ok) {
       throw new Error("Failed to fetch Freepik photos");
     }
-    const data: {
-      data: {
-        id: number;
-        title: string;
-        image: {
-          source: {
-            url: string;
-            size: string;
-          };
-        };
-        author: {
-          name: string;
-          avatar: string;
-        };
-      }[];
-    } = await response.json();
-    const photos = data.data.map((photo) => {
+    const data = await response.json();
+    const photos = data.data.map((photo: FreepikPhoto) => {
       const url = photo.title + "_" + photo.id;
       const slug = url.replace(/ /g, "-");
       const widthAndHeight = photo.image.source.size.split("x");
@@ -93,5 +103,28 @@ export const getFreepikPhotos = async ({
   } catch (error) {
     console.error("Error fetching Freepik photos", error);
     throw new Error("Failed to fetch Freepik photos");
+  }
+};
+
+export const handleFreepikDownload = async (photoId: number) => {
+  try {
+    const downloadUrl = await getFreepikDownloadUrl(Number(photoId));
+    console.log(downloadUrl, "downloadUrl");
+    const response = await fetch(downloadUrl);
+    const blob = await response.blob();
+    console.log(downloadUrl, "downloadUrl");
+    const objectUrl = URL.createObjectURL(blob);
+
+    const anchor = document.createElement("a");
+    anchor.href = objectUrl;
+    anchor.setAttribute("download", `${photoId}.zip`);
+    document.body.appendChild(anchor);
+    console.log(anchor, "anchor");
+    anchor.click();
+    document.body.removeChild(anchor);
+
+    URL.revokeObjectURL(objectUrl);
+  } catch (error) {
+    console.error("Error downloading Freepik photo", error);
   }
 };

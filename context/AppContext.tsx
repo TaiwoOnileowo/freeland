@@ -1,5 +1,5 @@
 "use client";
-import { AppContextType, Photo } from "@/types";
+import { AppContextType } from "@/types";
 import React, { createContext } from "react";
 
 export const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -7,15 +7,12 @@ export const AppContext = createContext<AppContextType | undefined>(undefined);
 export const AppProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
-  const [photoData, setPhotoData] = React.useState<Photo[]>([]);
-  const [loading, setLoading] = React.useState(false);
+  const [activeKingdom, setActiveKingdom] = React.useState("All Kingdoms");
   return (
     <AppContext.Provider
       value={{
-        photoData,
-        setPhotoData,
-        loading,
-        setLoading,
+        activeKingdom,
+        setActiveKingdom,
       }}
     >
       {children}

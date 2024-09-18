@@ -16,8 +16,6 @@ export interface Photo {
 }
 
 export interface AppContextType {
-  photoData: Photo[];
-  setPhotoData: React.Dispatch<React.SetStateAction<Photo[]>>;
-  loading: boolean;
-  setLoading: React.Dispatch<React.SetStateAction<boolean>>;
+  activeKingdom: string;
+  setActiveKingdom: React.Dispatch<React.SetStateAction<string>>;
 }

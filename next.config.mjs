@@ -22,6 +22,10 @@ const nextConfig = {
         protocol: "https",
         hostname: "img.b2bpic.net"
       },
+      {
+        protocol: "https",
+        hostname: "pixabay.com"
+      },
     ],
   },
   reactStrictMode: false,

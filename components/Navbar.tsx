@@ -4,7 +4,7 @@ import React from "react";
 import NavList from "./NavList";
 const Navbar = () => {
   return (
-    <nav className="flex justify-between  text-sm font-medium font-sans py-4  top-0 w-full px-4">
+    <nav className="flex justify-between  text-sm font-medium font-open_sans py-4  top-0 w-full px-4">
       <div className="flex items-center gap-12">
         <h1 className="text-3xl font-bold">FREELAND</h1>
         <NavList />

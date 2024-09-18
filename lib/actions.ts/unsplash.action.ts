@@ -12,15 +12,16 @@ export const getUnsplashPhotos = async ({
   page,
   perPage,
   signal,
-  searchTerm,
+  query,
 }: {
   page: number;
   perPage: number;
   signal?: AbortSignal;
-  searchTerm?: string;
+  query?: string;
 }) => {
-  const unsplashUrl = searchTerm
-    ? `https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}&per_page=${perPage}`
+  console.log(query, "unsplashquery");
+  const unsplashUrl = query
+    ? `https://api.unsplash.com/search/photos?query=${query}&page=${page}&per_page=${perPage}orderBy=relevant`
     : `https://api.unsplash.com/photos?page=${page}&per_page=${perPage}`;
   try {
     const response = await fetch(unsplashUrl, {
@@ -41,22 +42,24 @@ export const getUnsplashPhotos = async ({
             slug: string;
           })[];
         } = await response.json();
-    const mappedData = searchTerm && 'results' in data ? data.results : data;
-    const photos: Photo[] = (mappedData as (Basic & { slug: string; })[]).map((photo) => ({
-      id: photo.id,
-      width: photo.width,
-      height: photo.height,
-      blur_hash: photo.blur_hash,
-      alt: photo.alt_description,
-      url: photo.urls.small,
-      freeland_url: `/images/${photo.slug}`,
-      author: photo.user.name,
-      author_url: photo.user.links.html,
-      likes: 0,
-      provider: "Unsplash",
-      provider_logo: "https://unsplash.com/favicon.ico",
-      provider_url: "https://unsplash.com/",
-    }));
+    const mappedData = query && "results" in data ? data.results : data;
+    const photos: Photo[] = (mappedData as (Basic & { slug: string })[]).map(
+      (photo) => ({
+        id: photo.id,
+        width: photo.width,
+        height: photo.height,
+        blur_hash: photo.blur_hash,
+        alt: photo.alt_description,
+        url: photo.urls.small,
+        freeland_url: `/images/${photo.slug}`,
+        author: photo.user.name,
+        author_url: photo.user.links.html,
+        likes: 0,
+        provider: "Unsplash",
+        provider_logo: "https://unsplash.com/favicon.ico",
+        provider_url: "https://unsplash.com/",
+      })
+    );
     return photos;
   } catch (error) {
     console.error("Error fetching photos", error);

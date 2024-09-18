@@ -4,26 +4,47 @@ import { shuffleArray } from "../utils";
 import { getFreepikPhotos } from "./freepik.actions";
 import { getPexelsPhotos } from "./pexels.actions";
 import { getUnsplashPhotos } from "./unsplash.action";
+import { getPixabayPhotos } from "./pixabay.actions";
 export const fetchPhotos = async ({
   page,
   perPage,
 
-  searchTerm,
+  query,
 }: {
   page: number;
   perPage: number;
-  searchTerm?: string;
+  query?: string;
 }) => {
   const controller = new AbortController();
   const signal = controller.signal;
 
   try {
-    const freePikData = await getFreepikPhotos({ page, perPage, signal, searchTerm });
-    const pexelsData = await getPexelsPhotos({ page, perPage, signal, searchTerm });
-    const unsplashData = await getUnsplashPhotos({ page, perPage, signal , searchTerm});
-
+    // const freePikData = await getFreepikPhotos({
+    //   page,
+    //   perPage,
+    //   signal,
+    //   query,
+    // });
+    const pexelsData = await getPexelsPhotos({ page, perPage, signal, query });
+    const unsplashData = await getUnsplashPhotos({
+      page,
+      perPage,
+      signal,
+      query,
+    });
+    const pixabayData = await getPixabayPhotos({
+      page,
+      perPage,
+      signal,
+      query,
+    });
     if (!signal.aborted) {
-      const combinedData = [...freePikData, ...pexelsData, ...unsplashData];
+      const combinedData = [
+        // ...freePikData,
+        ...pexelsData,
+        ...unsplashData,
+        ...pixabayData,
+      ];
       const shuffledData: Photo[] = shuffleArray(
         Array.from(new Set(combinedData))
       );

@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import { MdOutlineFileDownload } from "react-icons/md";
-import usePexels from "@/hooks/usePexels";
 import useUnsplash from "@/hooks/useUnsplash";
 import Link from "next/link";
 import Image from "next/image";
 import useFreepik from "@/hooks/useFreepik";
+import useFreeland from "@/hooks/useFreeland";
 import { Skeleton } from "@mui/material";
 const FreelandImage = ({ photo, index }: { photo: any; index: number }) => {
   const [imageLoading, setImageLoading] = useState(false);
-  const { handlePexelsDownload } = usePexels();
+
   const { handleUnsplashDownload } = useUnsplash();
+  const { handlePhotoDownload } = useFreeland();
   const { handleFreepikDownload } = useFreepik();
   return (
     <figure key={photo.id} className="mb-4 cursor-pointer">
@@ -20,12 +21,15 @@ const FreelandImage = ({ photo, index }: { photo: any; index: number }) => {
               className="bg-white hover:bg-gray-100 rounded-md w-8 h-8 flex items-center justify-center text-sm"
               onClick={(e) => {
                 e.preventDefault();
-                if (photo.provider === "Pexels") {
-                  handlePexelsDownload(e, photo);
+                if (
+                  photo.provider === "Pexels" ||
+                  photo.provider === "Pixabay"
+                ) {
+                  handlePhotoDownload(photo);
                 } else if (photo.provider === "Freepik") {
-                  handleFreepikDownload(e, photo.id);
+                  handleFreepikDownload(photo.id);
                 } else if (photo.provider === "Unsplash") {
-                  handleUnsplashDownload(e, photo.id);
+                  handleUnsplashDownload(photo.id);
                 }
               }}
             >

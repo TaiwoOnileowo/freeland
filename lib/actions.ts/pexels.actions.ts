@@ -11,15 +11,15 @@ export const getPexelsPhotos = async ({
   page,
   perPage,
   signal,
-  searchTerm,
+  query,
 }: {
   page: number;
   perPage: number;
   signal?: AbortSignal;
-  searchTerm?: string;
+  query?: string;
 }) => {
-  const pexelsUrl = searchTerm
-    ? `https://api.pexels.com/v1/search?query=${searchTerm}&per_page=${perPage}&page=${page}`
+  const pexelsUrl = query
+    ? `https://api.pexels.com/v1/search?query=${query}&per_page=${perPage}&page=${page}`
     : `https://api.pexels.com/v1/curated?per_page=${perPage}&page=${page}`;
   try {
     const response = await fetch(pexelsUrl, {
@@ -58,3 +58,4 @@ export const getPexelsPhotos = async ({
     throw new Error("Failed to fetch photos");
   }
 };
+

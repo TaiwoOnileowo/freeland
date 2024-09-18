@@ -1,14 +1,10 @@
-import { getFreepikDownloadUrl } from "@/lib/actions.ts/freepik.actions";
 import React from "react";
-
-const useFreepik = () => {
-  const handleFreepikDownload = async (
-    e: React.MouseEvent<HTMLSpanElement, MouseEvent>,
-    photoId: string
-  ) => {
-    e.preventDefault();
+import { getFreepikDownloadUrl } from "@/lib/actions.ts/freepik.actions";
+const useFreePik = () => {
+  const handleFreepikDownload = async (photoId: number) => {
     try {
-      const downloadUrl = await getFreepikDownloadUrl(photoId);
+      const downloadUrl = await getFreepikDownloadUrl(Number(photoId));
+      console.log(downloadUrl, "downloadUrl");
       const response = await fetch(downloadUrl);
       const blob = await response.blob();
       console.log(downloadUrl, "downloadUrl");
@@ -18,6 +14,7 @@ const useFreepik = () => {
       anchor.href = objectUrl;
       anchor.setAttribute("download", `${photoId}.zip`);
       document.body.appendChild(anchor);
+      console.log(anchor, "anchor");
       anchor.click();
       document.body.removeChild(anchor);
 
@@ -31,4 +28,4 @@ const useFreepik = () => {
   };
 };
 
-export default useFreepik;
+export default useFreePik;
