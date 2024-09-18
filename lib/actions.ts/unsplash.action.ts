@@ -32,11 +32,17 @@ export const getUnsplashPhotos = async ({
     if (!response.ok) {
       throw new Error("Failed to fetch Unsplash photos");
     }
-    const data: (Basic & {
-      slug: string;
-    })[] = await response.json();
-    const mappedData = searchTerm ? data.results : data;
-    const photos: Photo[] = mappedData.map((photo) => ({
+    const data:
+      | (Basic & {
+          slug: string;
+        })[]
+      | {
+          results: (Basic & {
+            slug: string;
+          })[];
+        } = await response.json();
+    const mappedData = searchTerm && 'results' in data ? data.results : data;
+    const photos: Photo[] = (mappedData as (Basic & { slug: string; })[]).map((photo) => ({
       id: photo.id,
       width: photo.width,
       height: photo.height,
