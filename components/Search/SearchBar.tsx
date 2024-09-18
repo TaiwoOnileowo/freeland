@@ -1,6 +1,7 @@
 "use client";
 import React, { useState } from "react";
 import { IoIosSearch } from "react-icons/io";
+
 import {
   Select,
   SelectContent,
@@ -9,6 +10,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IoClose } from "react-icons/io5";
+import { fetchPhotos } from "@/lib/actions.ts/fl_universal.actions";
+import { useAppContext } from "@/context";
 const SearchBar = ({
   categories,
   background,
@@ -16,6 +19,7 @@ const SearchBar = ({
   categories: string[];
   background?: string;
 }) => {
+  const { photoData, setPhotoData, loading, setLoading } = useAppContext();
   const [searchInput, setSearchInput] = useState("");
   const [searchCategory, setSearchCategory] = useState("All");
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -24,7 +28,17 @@ const SearchBar = ({
   const handleCategoryChange = (value: string) => {
     setSearchCategory(value);
   };
-
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setLoading(true);
+    const photos = await fetchPhotos({
+      page: 1,
+      perPage: 30,
+      searchTerm: searchInput,
+    });
+    setPhotoData(photos || []);
+    setLoading(false);
+  };
   return (
     <div
       className={`w-full  h-14 font-sans  rounded-md  flex gap-2 ${
@@ -48,9 +62,9 @@ const SearchBar = ({
 
       <hr className="border-gray-200 border h-full" />
       <form
-        action=""
         className="w-full h-full py-2"
         aria-label="Search Free Resources"
+        onSubmit={handleSubmit}
       >
         <input
           type="text"
@@ -61,7 +75,7 @@ const SearchBar = ({
             background ?? "bg-white"
           } `}
           placeholder={
-            searchCategory !== "All"
+            searchCategory.toLowerCase() !== "all"
               ? `Search all ${searchCategory}...`
               : "Search all resources..."
           }

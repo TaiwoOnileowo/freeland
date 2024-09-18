@@ -1,6 +1,6 @@
 "use client";
 import React, { useEffect, useState } from "react";
-import Search from "@/components/Search/SearchBar";
+import SearchBar from "@/components/Search/SearchBar";
 import { motion } from "framer-motion";
 const SearchHeader = () => {
   const [scrollPosition, setScrollPosition] = useState(0);
@@ -35,7 +35,7 @@ const SearchHeader = () => {
       >
         FREELAND
       </motion.h1>
-      <Search categories={imageCategories} background="bg-gray-200" />
+      <SearchBar categories={imageCategories} background="bg-gray-200" />
     </div>
   );
 };

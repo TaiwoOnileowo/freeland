@@ -8,28 +8,35 @@ if (!unsplashApiKey) {
   throw new Error("Unsplash API key is missing");
 }
 
-export const getUnsplashPhotosPerPage = async (
-  page = 1,
-  perPage = 30,
-  signal: AbortSignal
-) => {
+export const getUnsplashPhotos = async ({
+  page,
+  perPage,
+  signal,
+  searchTerm,
+}: {
+  page: number;
+  perPage: number;
+  signal?: AbortSignal;
+  searchTerm?: string;
+}) => {
+  const unsplashUrl = searchTerm
+    ? `https://api.unsplash.com/search/photos?query=${searchTerm}&page=${page}&per_page=${perPage}`
+    : `https://api.unsplash.com/photos?page=${page}&per_page=${perPage}`;
   try {
-    const response = await fetch(
-      `https://api.unsplash.com/photos?page=${page}&per_page=${perPage}`,
-      {
-        headers: {
-          Authorization: `Client-ID ${unsplashApiKey}`,
-        },
-        signal,
-      }
-    );
+    const response = await fetch(unsplashUrl, {
+      headers: {
+        Authorization: `Client-ID ${unsplashApiKey}`,
+      },
+      signal,
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch Unsplash photos");
     }
     const data: (Basic & {
       slug: string;
     })[] = await response.json();
-    const photos: Photo[] = data.map((photo) => ({
+    const mappedData = searchTerm ? data.results : data;
+    const photos: Photo[] = mappedData.map((photo) => ({
       id: photo.id,
       width: photo.width,
       height: photo.height,

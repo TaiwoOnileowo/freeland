@@ -7,21 +7,27 @@ if (!pexelsApiKey) {
   throw new Error("Pexels API key is missing");
 }
 
-export const getPexelsPhotosPerPage = async (
-  page = 1,
-  perPage = 30,
-  signal: AbortSignal
-) => {
+export const getPexelsPhotos = async ({
+  page,
+  perPage,
+  signal,
+  searchTerm,
+}: {
+  page: number;
+  perPage: number;
+  signal?: AbortSignal;
+  searchTerm?: string;
+}) => {
+  const pexelsUrl = searchTerm
+    ? `https://api.pexels.com/v1/search?query=${searchTerm}&per_page=${perPage}&page=${page}`
+    : `https://api.pexels.com/v1/curated?per_page=${perPage}&page=${page}`;
   try {
-    const response = await fetch(
-      `https://api.pexels.com/v1/curated?per_page=${perPage}&page=${page}`,
-      {
-        headers: {
-          Authorization: pexelsApiKey,
-        },
-        signal,
-      }
-    );
+    const response = await fetch(pexelsUrl, {
+      headers: {
+        Authorization: pexelsApiKey,
+      },
+      signal,
+    });
     if (!response.ok) {
       throw new Error("Failed to fetch Pexels photos");
     }
