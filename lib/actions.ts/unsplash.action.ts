@@ -2,7 +2,7 @@
 
 import { Photo } from "@/types";
 import { Basic } from "unsplash-js/dist/methods/photos/types";
-
+import unsplashlogo from "@/public/icons/unsplash.svg";
 const unsplashApiKey = process.env.FREELAND_UNSPLASH_ACCESS_KEY;
 if (!unsplashApiKey) {
   throw new Error("Unsplash API key is missing");
@@ -42,7 +42,9 @@ export const getUnsplashPhotos = async ({
             slug: string;
           })[];
         } = await response.json();
+    console.log(response, "unsplashresponse");
     const mappedData = query && "results" in data ? data.results : data;
+
     const photos: Photo[] = (mappedData as (Basic & { slug: string })[]).map(
       (photo) => ({
         id: photo.id,
@@ -56,7 +58,7 @@ export const getUnsplashPhotos = async ({
         author_url: photo.user.links.html,
         likes: 0,
         provider: "Unsplash",
-        provider_logo: "https://unsplash.com/favicon.ico",
+        provider_logo: unsplashlogo,
         provider_url: "https://unsplash.com/",
       })
     );

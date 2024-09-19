@@ -1,7 +1,7 @@
 "use server";
 
 import { Photo } from "@/types";
-
+import pixabaylogo from "@/public/icons/pixabay.svg";
 const pixabayApiKey = process.env.FREELAND_PIXABAY_API_KEY;
 if (!pixabayApiKey) {
   throw new Error("Pexels API key is missing");
@@ -47,14 +47,14 @@ export const getPixabayPhotos = async ({
         width: photo.imageWidth,
         height: photo.imageHeight,
         url: photo.webformatURL,
-        blur_hash: photo.webformatURL,
+        blur_hash: "",
         alt: slug,
         freeland_url: `/images/${slug}`,
         author: photo.user,
         author_url: photo.userImageURL,
         likes: 0,
         provider: "PixaBay",
-        provider_logo: "https://pixabay.com/favicon.ico",
+        provider_logo: pixabaylogo,
         provider_url: "https://pixabay.com/",
       };
     });

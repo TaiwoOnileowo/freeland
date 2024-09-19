@@ -1,6 +1,6 @@
 "use server";
 const freepikApiKey = process.env.FREELAND_FREEPIK_API_KEY;
-
+import freepiklogo from "@/public/icons/freepik.svg";
 if (!freepikApiKey) {
   throw new Error("Missing Freepik API key");
 }
@@ -95,7 +95,7 @@ export const getFreepikPhotos = async ({
         author_url: photo.author.avatar,
         likes: 0,
         provider: "Freepik",
-        provider_logo: "https://www.freepik.com/favicon.ico",
+        provider_logo: freepiklogo,
         provider_url: " https://www.freepik.com/",
       };
     });

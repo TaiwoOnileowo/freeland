@@ -1,6 +1,6 @@
 import React from "react";
 import { getFreepikDownloadUrl } from "@/lib/actions.ts/freepik.actions";
-const useFreePik = () => {
+const useFreepik = () => {
   const handleFreepikDownload = async (photoId: number) => {
     try {
       const downloadUrl = await getFreepikDownloadUrl(Number(photoId));
@@ -28,4 +28,4 @@ const useFreePik = () => {
   };
 };
 
-export default useFreePik;
+export default useFreepik;

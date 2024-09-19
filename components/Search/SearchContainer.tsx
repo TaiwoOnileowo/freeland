@@ -37,7 +37,7 @@ const SearchContainer = ({
   }, [page, perPage, query, lowercaseActiveKingdom]);
 
   return (
-    <div className="w-full px-6 flex flex-col grid-result ">
+    <div className="w-full px-6 flex flex-col grid-result   ">
       {lowercaseActiveKingdom === "images" && (
         <ImageResults photos={data} loading={loading} />
       )}

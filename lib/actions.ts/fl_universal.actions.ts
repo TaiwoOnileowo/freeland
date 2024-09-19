@@ -19,12 +19,12 @@ export const fetchPhotos = async ({
   const signal = controller.signal;
 
   try {
-    // const freePikData = await getFreepikPhotos({
-    //   page,
-    //   perPage,
-    //   signal,
-    //   query,
-    // });
+    const freePikData = await getFreepikPhotos({
+      page,
+      perPage,
+      signal,
+      query,
+    });
     const pexelsData = await getPexelsPhotos({ page, perPage, signal, query });
     const unsplashData = await getUnsplashPhotos({
       page,
@@ -40,7 +40,7 @@ export const fetchPhotos = async ({
     });
     if (!signal.aborted) {
       const combinedData = [
-        // ...freePikData,
+        ...freePikData,
         ...pexelsData,
         ...unsplashData,
         ...pixabayData,

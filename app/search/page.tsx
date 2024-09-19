@@ -1,5 +1,6 @@
+"use client";
 import Navbar from "@/components/Navbar";
-import React, { useEffect } from "react";
+import React, { useState } from "react";
 import FiltersHeader from "@/components/Search/FiltersHeader";
 import SearchContainer from "@/components/Search/SearchContainer";
 import Filters from "@/components/Search/Filters";
@@ -14,16 +15,21 @@ const Page = ({
   };
 }) => {
   const { query, kingdom } = searchParams;
-  console.log(kingdom, "kingdom");
-
+  const [showFilters, setShowFilters] = useState(false);
+  const handleToggleFilters = () => {
+    setShowFilters(!showFilters);
+  };
   return (
-    <div className="h-[100vh]">
+    <div className="min-h-[100vh] z-[20]">
       <Navbar />
       <SearchHeader query={query} key={query} activeKingdom={kingdom} />
-      <div className="grid-container">
+      <div className="grid-container ">
         <hr className="border-b-[0.5px] border-b-gray-300 w-full mt-2" />
-        <FiltersHeader />
-        <Filters />
+        <FiltersHeader
+          showFilters={showFilters}
+          onToggleFilters={handleToggleFilters}
+        />
+        {showFilters && <Filters />}
         <SearchContainer activeKingdom={kingdom} query={query} />
       </div>
     </div>
