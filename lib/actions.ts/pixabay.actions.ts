@@ -4,7 +4,7 @@ import { Photo } from "@/types";
 import pixabaylogo from "@/public/icons/pixabay.svg";
 const pixabayApiKey = process.env.FREELAND_PIXABAY_API_KEY;
 if (!pixabayApiKey) {
-  throw new Error("Pexels API key is missing");
+  throw new Error("Pixabay API key is missing");
 }
 interface PixabayPhoto {
   id: string;

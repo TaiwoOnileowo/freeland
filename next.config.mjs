@@ -20,15 +20,15 @@ const nextConfig = {
       },
       {
         protocol: "https",
-        hostname: "www.freepik.com"
+        hostname: "www.freepik.com",
       },
       {
         protocol: "https",
-        hostname: "img.b2bpic.net"
+        hostname: "img.b2bpic.net",
       },
       {
         protocol: "https",
-        hostname: "pixabay.com"
+        hostname: "pixabay.com",
       },
     ],
   },

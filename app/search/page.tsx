@@ -12,13 +12,18 @@ const Page = ({
   searchParams: {
     query: string;
     kingdom: string;
+    order: string;
   };
 }) => {
-  const { query, kingdom } = searchParams;
+  const { query, kingdom, order } = searchParams;
   const [showFilters, setShowFilters] = useState(false);
   const handleToggleFilters = () => {
     setShowFilters(!showFilters);
   };
+  const filters = {
+    order,
+  };
+
   return (
     <div className="min-h-[100vh] z-[20]">
       <Navbar />
@@ -30,7 +35,7 @@ const Page = ({
           onToggleFilters={handleToggleFilters}
         />
         {showFilters && <Filters />}
-        <SearchContainer activeKingdom={kingdom} query={query} />
+        <SearchContainer activeKingdom={kingdom} query={query} filters={filters} />
       </div>
     </div>
   );

@@ -1,13 +1,24 @@
 "use server";
 
 import { Photo } from "@/types";
-import { Photos } from "pexels";
+
 import pexelslogo from "@/public/icons/pexels.svg";
 const pexelsApiKey = process.env.FREELAND_PEXELS_API_KEY;
 if (!pexelsApiKey) {
   throw new Error("Pexels API key is missing");
 }
-
+interface PexelPhoto {
+  id: number;
+  width: number;
+  height: number;
+  url: string;
+  photographer: string;
+  photographer_url: string;
+  src: {
+    original: string;
+  };
+  alt?: string;
+}
 export const getPexelsPhotos = async ({
   page,
   perPage,
@@ -32,9 +43,9 @@ export const getPexelsPhotos = async ({
     if (!response.ok) {
       throw new Error("Failed to fetch Pexels photos");
     }
-    const data: Photos = await response.json();
+    const data = await response.json();
 
-    const photo: Photo[] = data.photos.map((photo) => {
+    const photo: Photo[] = data.photos.map((photo: PexelPhoto) => {
       const slug =
         photo.url.split("https://www.pexels.com/photo/").pop() ??
         `photo by ${photo.photographer}`;

@@ -1,9 +1,9 @@
 import React from "react";
 import { getFreepikDownloadUrl } from "@/lib/actions.ts/freepik.actions";
 const useFreepik = () => {
-  const handleFreepikDownload = async (photoId: number) => {
+  const handleFreepikDownload = async (photoId: string) => {
     try {
-      const downloadUrl = await getFreepikDownloadUrl(Number(photoId));
+      const downloadUrl = await getFreepikDownloadUrl(photoId);
       console.log(downloadUrl, "downloadUrl");
       const response = await fetch(downloadUrl);
       const blob = await response.blob();

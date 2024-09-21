@@ -10,7 +10,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { IoClose } from "react-icons/io5";
-import { fetchPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { useAppContext } from "@/context";
 import { usePathname } from "next/navigation";
 import Image from "next/image";
@@ -130,7 +129,7 @@ const SearchBar = ({
           />
         )}
 
-        <div className="flex items-center gap-4 h-full">
+        <div className="flex items-center gap-4 h-full py-1">
           <div
             className={`flex h-full items-center justify-center px-2 gap-3 ${
               searchInput ? "opacity-100" : "opacity-0"

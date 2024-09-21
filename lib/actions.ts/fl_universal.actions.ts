@@ -2,18 +2,24 @@
 import { Photo } from "@/types";
 import { shuffleArray } from "../utils";
 import { getFreepikPhotos } from "./freepik.actions";
-import { getPexelsPhotos } from "./pexels.actions";
 import { getUnsplashPhotos } from "./unsplash.action";
 import { getPixabayPhotos } from "./pixabay.actions";
-export const fetchPhotos = async ({
+import { getPexelsPhotos } from "./pexels.actions";
+import { formatImageData } from "../utils";
+import { connectToDB } from "../mongodb";
+import ImageCache from "../models/ImageCache";
+import { redisClient, connectToRedis } from "../redis";
+export const fetchPhotosFromApi = async ({
   page,
   perPage,
 
   query,
+  filters,
 }: {
   page: number;
   perPage: number;
-  query?: string;
+  query: string;
+  filters?: { order: string };
 }) => {
   const controller = new AbortController();
   const signal = controller.signal;
@@ -24,6 +30,7 @@ export const fetchPhotos = async ({
       perPage,
       signal,
       query,
+      filters,
     });
     const pexelsData = await getPexelsPhotos({ page, perPage, signal, query });
     const unsplashData = await getUnsplashPhotos({
@@ -45,11 +52,9 @@ export const fetchPhotos = async ({
         ...unsplashData,
         ...pixabayData,
       ];
-      const shuffledData: Photo[] = shuffleArray(
-        Array.from(new Set(combinedData))
-      );
+      const formattedData = formatImageData(combinedData);
 
-      return shuffledData;
+      return formattedData;
     }
   } catch (error) {
     if (!signal.aborted) {
@@ -57,5 +62,39 @@ export const fetchPhotos = async ({
     }
   }
 
-  return controller.abort();
+  controller.abort();
+  return [];
+};
+
+export const getPhotos = async ({
+  page,
+  perPage,
+  query,
+  filters,
+}: {
+  page: number;
+  perPage: number;
+  query: string;
+  filters?: { order: string };
+}) => {
+  connectToRedis();
+  const cacheKey = `photos:${query === "" ? "all" : query}:${page}`;
+
+  const cachedData = await redisClient.get(cacheKey);
+  if (cachedData) {
+    console.log("Serving from Redis cache");
+    return JSON.parse(cachedData);
+  }
+
+  console.log("Fetching new data from API");
+  const data: Photo[][] = await fetchPhotosFromApi({
+    page,
+    perPage,
+    query,
+    filters,
+  });
+
+  await redisClient.set(cacheKey, JSON.stringify(data), { EX: 3600 });
+
+  return data;
 };
