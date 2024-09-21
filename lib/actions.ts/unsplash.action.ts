@@ -7,7 +7,23 @@ const unsplashApiKey = process.env.FREELAND_UNSPLASH_ACCESS_KEY;
 if (!unsplashApiKey) {
   throw new Error("Unsplash API key is missing");
 }
-
+interface UnsplashPhoto {
+  id: string;
+  width: number;
+  height: number;
+  blur_hash?: string;
+  alt_description?: string;
+  slug: string;
+  urls: {
+    small: string;
+  };
+  user: {
+    name: string;
+    links: {
+      html: string;
+    };
+  };
+}
 export const getUnsplashPhotos = async ({
   page,
   perPage,
@@ -36,7 +52,7 @@ export const getUnsplashPhotos = async ({
 
     const mappedData = query && "results" in data ? data.results : data;
 
-    const photos: Photo[] = mappedData.map((photo) => ({
+    const photos: Photo[] = mappedData.map((photo: UnsplashPhoto) => ({
       id: photo.id,
       width: photo.width,
       height: photo.height,
