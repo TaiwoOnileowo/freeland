@@ -127,28 +127,14 @@ const getAllQueries = async () => {
 };
 const mode = process.env.NODE_ENV;
 export const GET = async (req: NextRequest) => {
-  const blurHashCron = cron.schedule(
-    "* * * * *",
-    async () => {
-      connectToRedis();
-      console.log("Running cron job to generate blurhashes");
-      await getAllQueries();
-      console.log("Search keywords", searchKeyWords);
-      await fetchImagesAndGenerateBlurhash();
-      console.log(`Cron job completed from ${mode}`);
-    },
-    {
-      scheduled: false,
-    }
-  );
-  // if (mode === "production") {
-  blurHashCron.start();
-  console.log(blurHashCron);
+  connectToRedis();
+  console.log("Running cron job to generate blurhashes");
+  await getAllQueries();
+  console.log("Search keywords", searchKeyWords);
+  await fetchImagesAndGenerateBlurhash();
+  console.log(`Cron job completed from ${mode}`);
+
   return NextResponse.json({
-    message: `Cron job scheduled from ${mode}, ${blurHashCron}`,
+    message: `Cron job scheduled from ${mode}`,
   });
-  // }else{
-  //   console.log("Cron job not started in development mode");
-  // }
-  return NextResponse.json({ message: `Cron job not scheduled from ${mode}` });
 };
