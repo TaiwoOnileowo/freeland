@@ -1,4 +1,3 @@
-const cron = require("node-cron");
 import { encode } from "blurhash";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { Photo } from "@/types";
@@ -127,14 +126,17 @@ const getAllQueries = async () => {
 };
 const mode = process.env.NODE_ENV;
 export const GET = async (req: NextRequest) => {
-  connectToRedis();
-  console.log("Running cron job to generate blurhashes");
-  await getAllQueries();
-  console.log("Search keywords", searchKeyWords);
-  await fetchImagesAndGenerateBlurhash();
-  console.log(`Cron job completed from ${mode}`);
-
-  return NextResponse.json({
-    message: `Cron job scheduled from ${mode}`,
+  await connectToRedis().then(() => {
+    return NextResponse.json({
+      message: `Cron job scheduled from ${mode}`,
+    });
   });
+  return NextResponse.json({
+    message: "Fail",
+  });
+  // console.log("Running cron job to generate blurhashes");
+  // await getAllQueries();
+  // console.log("Search keywords", searchKeyWords);
+  // await fetchImagesAndGenerateBlurhash();
+  // console.log(`Cron job completed from ${mode}`);
 };
