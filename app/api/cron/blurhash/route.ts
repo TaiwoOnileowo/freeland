@@ -1,16 +1,12 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runBlurhashJob } from "@/jobs/blurhash";
-
+export const dynamic = "force-dynamic";
+export const maxDuration = 60;
 export async function GET(req: NextRequest) {
-  await runBlurhashJob();
+  const isSuccess = await runBlurhashJob();
 
   // Create the response with cache headers to disable caching
-  const response = NextResponse.json({ message: "Job completed" });
-  
-  // Set cache control headers
-  response.headers.set("Cache-Control", "no-store, no-cache, must-revalidate, proxy-revalidate");
-  response.headers.set("Pragma", "no-cache");
-  response.headers.set("Expires", "0");
-
-  return response;
+  return NextResponse.json({
+    message: `Job completed, ${isSuccess ? "success" : "failed"}`,
+  });
 }

@@ -1,4 +1,4 @@
-"use server"
+"use server";
 import { encode } from "blurhash";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { Photo } from "@/types";
@@ -135,4 +135,5 @@ export const runBlurhashJob = async () => {
   console.log("Search keywords", searchKeyWords);
   await fetchImagesAndGenerateBlurhash();
   console.log("Completed cron job to generate blurhashes");
+  return true;
 };
