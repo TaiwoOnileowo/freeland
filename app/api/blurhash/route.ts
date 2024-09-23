@@ -1,4 +1,4 @@
-import cron from "node-cron";
+const cron = require("node-cron");
 import { encode } from "blurhash";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { Photo } from "@/types";
