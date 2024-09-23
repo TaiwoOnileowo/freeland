@@ -125,7 +125,7 @@ const getAllQueries = async () => {
     : ["all", "nature", "city", "food", "people", "technology"];
   // return searchKeyWords;
 };
-const mode = process.env.NODE_ENV;
+const mode = process.env.FREELAND_NODE_ENV;
 export const GET = async (req: NextRequest) => {
   const blurHashCron = cron.schedule(
     "* * * * *",
@@ -136,7 +136,7 @@ export const GET = async (req: NextRequest) => {
       console.log("Search keywords", searchKeyWords);
       await fetchImagesAndGenerateBlurhash();
       console.log(`Cron job completed from ${mode}`);
-      return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
+    
     },
     {
       scheduled: false,
@@ -144,8 +144,9 @@ export const GET = async (req: NextRequest) => {
   );
   if (mode === "production") {
     blurHashCron.start();
+    return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
   }else{
     console.log("Cron job not started in development mode");
   }
-  return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
+  return NextResponse.json({ message: `Cron job not scheduled from ${mode}` });
 };
