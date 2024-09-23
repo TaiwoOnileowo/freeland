@@ -125,7 +125,7 @@ const getAllQueries = async () => {
     : ["all", "nature", "city", "food", "people", "technology"];
   // return searchKeyWords;
 };
-
+const mode = process.env.NODE_ENV;
 export const GET = async (req: NextRequest) => {
   cron.schedule("* * * * *", async () => {
     connectToRedis();
@@ -134,7 +134,12 @@ export const GET = async (req: NextRequest) => {
     console.log("Search keywords", searchKeyWords);
     await fetchImagesAndGenerateBlurhash();
     console.log("Cron job completed");
-  });
 
-  return NextResponse.json({ message: "Cron job scheduled" });
+    return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
+  });
+  // blurHashCron.stop();
+  return NextResponse.json(
+    { message: "Cron job not scheduled" },
+    { status: 400 }
+  );
 };

@@ -12,7 +12,15 @@ const ImageResults = ({
   console.log(photos);
   return (
     <>
-   
+      {photos.length === 4 &&
+      photos[0].length === 0 &&
+      photos[1].length === 0 &&
+      photos[2].length === 0 &&
+      photos[3].length === 0 ? (
+        <div className="flex justify-center items-center h-96">
+          <p className="text-2xl text-gray-500">No images found</p>
+        </div>
+      ) : (
         <div className="flex ">
           {Array.from({ length: 4 }).map((_, index) => (
             <div key={index} className="w-1/4 p-2">
@@ -39,11 +47,7 @@ const ImageResults = ({
             </div>
           ))}
         </div>
-    
-        {/* <div className="flex justify-center items-center h-96">
-          <p className="text-2xl text-gray-500">No images found</p>
-        </div> */}
-      
+      )}
     </>
   );
 };

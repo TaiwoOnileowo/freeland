@@ -37,7 +37,13 @@ const SearchContainer = ({
     };
     fetchData();
   }, [page, perPage, query, lowercaseActiveKingdom, filters]);
-
+  if (data.length === 0) {
+    return (
+      <div className="w-full px-6 flex flex-col grid-result   ">
+        An error occured
+      </div>
+    );
+  }
   return (
     <div className="w-full px-6 flex flex-col grid-result   ">
       {lowercaseActiveKingdom === "images" && (

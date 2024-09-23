@@ -40,6 +40,8 @@ export const getPexelsPhotos = async ({
       },
       signal,
     });
+    // const responseData = await response.json();
+    // console.log(responseData, pexelsApiKey, "responseData");
     if (!response.ok) {
       throw new Error("Failed to fetch Pexels photos");
     }
