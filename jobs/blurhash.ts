@@ -1,3 +1,4 @@
+"use server"
 import { encode } from "blurhash";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { Photo } from "@/types";
