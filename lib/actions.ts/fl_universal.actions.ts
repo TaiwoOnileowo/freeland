@@ -1,13 +1,12 @@
 "use server";
 import { Photo } from "@/types";
-import { shuffleArray } from "../utils";
+
 import { getFreepikPhotos } from "./freepik.actions";
 import { getUnsplashPhotos } from "./unsplash.action";
 import { getPixabayPhotos } from "./pixabay.actions";
 import { getPexelsPhotos } from "./pexels.actions";
 import { formatImageData } from "../utils";
-import { connectToDB } from "../mongodb";
-import ImageCache from "../models/ImageCache";
+
 import { redisClient, connectToRedis } from "../redis";
 export const fetchPhotosFromApi = async ({
   page,
@@ -44,6 +43,7 @@ export const fetchPhotosFromApi = async ({
       perPage,
       signal,
       query,
+      filters,
     });
     if (!signal.aborted) {
       const combinedData = [
@@ -94,7 +94,7 @@ export const getPhotos = async ({
     filters,
   });
 
-  await redisClient.set(cacheKey, JSON.stringify(data), { EX: 3600 });
+  await redisClient.set(cacheKey, JSON.stringify(data), { EX: 10800 });
 
   return data;
 };

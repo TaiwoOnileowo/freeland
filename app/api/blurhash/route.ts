@@ -2,7 +2,7 @@ import cron from "node-cron";
 import { encode } from "blurhash";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { Photo } from "@/types";
-import ImageCache from "@/lib/models/ImageCache";
+
 import sharp from "sharp";
 import { formatImageData } from "@/lib/utils";
 import { redisClient, connectToRedis } from "@/lib/redis";
@@ -48,7 +48,7 @@ const generateBlurHash = async (imageUrl: string) => {
     const response = await fetchWithRetries(imageUrl, 3, 15000);
     if (!response) {
       // Return a fallback blurhash if the image request fails after retries
-      return "LEHV6nWB2yk8pyo0adR*.7kCMdnj"; // Example of a fallback blurhash
+      return "LEHV6nWB2yk8pyo0adR*.7kCMdnj"; //fallback blurhash
     }
     const buffer = await response.arrayBuffer();
     const image = sharp(Buffer.from(buffer));
@@ -89,10 +89,12 @@ const fetchImagesAndGenerateBlurhash = async () => {
         return photo;
       })
     );
+    const cacheKey = `photos:${query === "" ? "all" : query}:${1}`;
 
     const updatedPhotos = formatImageData(blurHashedPhotos);
-
-    await ImageCache.updateOne({ query, page: 1 }, { data: updatedPhotos });
+    await redisClient.set(cacheKey, JSON.stringify(updatedPhotos), {
+      EX: 10800,
+    });
   } catch (error) {
     console.error("Error fetching images or generating blurhash:", error);
   }
@@ -125,7 +127,7 @@ const getAllQueries = async () => {
 };
 
 export const GET = async (req: NextRequest) => {
-  cron.schedule("0 0 * * *", async () => {
+  cron.schedule("* * * * *", async () => {
     connectToRedis();
     console.log("Running cron job to generate blurhashes");
     await getAllQueries();

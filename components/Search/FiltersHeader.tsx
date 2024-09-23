@@ -92,7 +92,7 @@ const FiltersHeader = ({
           </SelectTrigger>
           <SelectContent>
             <SelectItem value="relevance">Most Relevant</SelectItem>
-            <SelectItem value={"recent"}>Recent</SelectItem>
+            <SelectItem value={"latest"}>Latest</SelectItem>
             <SelectItem value={"popular"}>Most Popular</SelectItem>
           </SelectContent>
         </Select>

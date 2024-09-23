@@ -20,15 +20,21 @@ export const getPixabayPhotos = async ({
   perPage,
   signal,
   query,
+  filters,
 }: {
   page: number;
   perPage: number;
   signal?: AbortSignal;
   query?: string;
+  filters?: {
+    order: string;
+  };
 }) => {
+  const order = filters?.order || "popular";
+ 
   const pixabayUrl = query
-    ? `https://pixabay.com/api/?key=${pixabayApiKey}&q=${query}&image_type=photo&pretty=trueper_page=${perPage}&page=${page}`
-    : `https://pixabay.com/api/?key=${pixabayApiKey}&image_type=photo&pretty=trueper_page=${perPage}&page=${page}`;
+    ? `https://pixabay.com/api/?key=${pixabayApiKey}&q=${query}&image_type=photo&pretty=true&per_page=${perPage}&page=${page}&order=${order}`
+    : `https://pixabay.com/api/?key=${pixabayApiKey}&image_type=photo&pretty=true&per_page=${perPage}&page=${page}&order=${order}`;
   try {
     const response = await fetch(pixabayUrl, {
       signal,
