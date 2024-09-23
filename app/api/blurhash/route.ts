@@ -142,11 +142,11 @@ export const GET = async (req: NextRequest) => {
       scheduled: false,
     }
   );
-  if (mode === "production") {
+  // if (mode === "production") {
     blurHashCron.start();
     return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
-  }else{
-    console.log("Cron job not started in development mode");
-  }
+  // }else{
+  //   console.log("Cron job not started in development mode");
+  // }
   return NextResponse.json({ message: `Cron job not scheduled from ${mode}` });
 };
