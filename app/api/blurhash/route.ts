@@ -125,7 +125,7 @@ const getAllQueries = async () => {
     : ["all", "nature", "city", "food", "people", "technology"];
   // return searchKeyWords;
 };
-const mode = process.env.FREELAND_NODE_ENV;
+const mode = process.env.NODE_ENV;
 export const GET = async (req: NextRequest) => {
   const blurHashCron = cron.schedule(
     "* * * * *",
