@@ -2,6 +2,7 @@ import HeroKingdoms from "./HeroKingdoms";
 import HeroBackground from "./HeroBackground";
 import SearchBar from "./Search/SearchBar";
 export default function Hero() {
+  console.log("Hero");
   return (
     <div className="h-[65vh] relative bg-primary-light flex flex-col p-24 items-center px-4 ">
       <HeroBackground />

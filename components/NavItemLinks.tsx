@@ -10,7 +10,7 @@ const NavItemLinks = () => {
   const handleHover = (image: StaticImageData) => {
     setActiveImage(image);
   };
-  console.log(activeImage);
+  
   return (
     <div className="group-hover:flex  hidden p-6 justify-between h-fit rounded-md bg-black w-[60vw]  absolute top-10 -left-10 z-[100]">
       <IoTriangle className="text-black  absolute -top-4 left-12 text-xl" />
