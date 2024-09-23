@@ -136,15 +136,17 @@ export const GET = async (req: NextRequest) => {
       console.log("Search keywords", searchKeyWords);
       await fetchImagesAndGenerateBlurhash();
       console.log(`Cron job completed from ${mode}`);
-    
     },
     {
       scheduled: false,
     }
   );
   // if (mode === "production") {
-    blurHashCron.start();
-    return NextResponse.json({ message: `Cron job scheduled from ${mode}` });
+  blurHashCron.start();
+  console.log(blurHashCron);
+  return NextResponse.json({
+    message: `Cron job scheduled from ${mode}, ${blurHashCron}`,
+  });
   // }else{
   //   console.log("Cron job not started in development mode");
   // }
