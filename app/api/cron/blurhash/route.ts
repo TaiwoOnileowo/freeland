@@ -1,11 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { runBlurhashJob } from "@/jobs/blurhash";
 
-export const config = {
-  runtime: "edge",
-};
+// export const runtime = "edge";
 
-export default async function handler(req: NextRequest) {
+export  async function GET(req: NextRequest) {
   await runBlurhashJob();
   return NextResponse.json({ message: "Job completed" });
 }
