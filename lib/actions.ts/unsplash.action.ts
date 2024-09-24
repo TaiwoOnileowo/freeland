@@ -29,15 +29,24 @@ export const getUnsplashPhotos = async ({
   perPage,
   signal,
   query,
+  filters,
 }: {
   page: number;
   perPage: number;
   signal?: AbortSignal;
   query?: string;
+  filters?: {
+    order: string;
+  };
 }) => {
+  let order = filters?.order || "relevant";
+  if (filters?.order === "relevance") {
+    order = "relevant";
+  }
+
   const unsplashUrl = query
-    ? `https://api.unsplash.com/search/photos?query=${query}&page=${page}&per_page=${perPage}orderBy=relevant`
-    : `https://api.unsplash.com/photos?page=${page}&per_page=${perPage}`;
+    ? `https://api.unsplash.com/search/photos?query=${query}&page=${page}&per_page=${perPage}&order_by=${order}`
+    : `https://api.unsplash.com/photos?page=${page}&per_page=${perPage}&order_by=${order}`;
   try {
     const response = await fetch(unsplashUrl, {
       headers: {

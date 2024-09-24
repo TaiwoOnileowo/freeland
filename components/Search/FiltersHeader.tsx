@@ -81,22 +81,24 @@ const FiltersHeader = ({
           ))}
         </div>
       </div>
-      <div className="flex gap-2 items-center justify-center text-sm rounded-md px-3">
-        <p className="text-gray-700">Sort By:</p>
-        <Select onValueChange={(value) => handleOrderChange(value)}>
-          <SelectTrigger className={`w-[140px] `}>
-            <SelectValue
-              placeholder={"Most Relevant"}
-              className="text-black "
-            />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="relevance">Most Relevant</SelectItem>
-            <SelectItem value={"latest"}>Latest</SelectItem>
-            <SelectItem value={"popular"}>Most Popular</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
+      {!showFilters && (
+        <div className="flex gap-2 items-center justify-center text-sm rounded-md px-3">
+          <p className="text-gray-700">Sort By:</p>
+          <Select onValueChange={(value) => handleOrderChange(value)}>
+            <SelectTrigger className={`w-[140px] `}>
+              <SelectValue
+                placeholder={"Most Relevant"}
+                className="text-black "
+              />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="relevance">Most Relevant</SelectItem>
+              <SelectItem value={"latest"}>Latest</SelectItem>
+              <SelectItem value={"popular"}>Most Popular</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      )}
     </div>
   );
 };

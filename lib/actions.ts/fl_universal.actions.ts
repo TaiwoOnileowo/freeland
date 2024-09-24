@@ -37,6 +37,7 @@ export const fetchPhotosFromApi = async ({
       perPage,
       signal,
       query,
+      filters,
     });
     const pixabayData = await getPixabayPhotos({
       page,
@@ -78,7 +79,8 @@ export const getPhotos = async ({
   filters?: { order: string };
 }) => {
   connectToRedis();
-  const cacheKey = `photos:${query === "" ? "all" : query}:${page}`;
+  const order = filters?.order || "relevance";
+  const cacheKey = `photos:${query === "" ? "all" : query}:${page}:filters:${order}`;
 
   const cachedData = await redisClient.get(cacheKey);
   if (cachedData) {

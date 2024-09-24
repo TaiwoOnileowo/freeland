@@ -7,7 +7,6 @@ import Pagination from "../Pagination";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { useAppContext } from "@/context";
 import ImageResults from "./ImageResults";
-import { runBlurhashJob } from "@/jobs/blurhash";
 
 const SearchContainer = ({
   query = "",
@@ -38,14 +37,8 @@ const SearchContainer = ({
     };
     fetchData();
   }, [page, perPage, query, lowercaseActiveKingdom, filters]);
-  useEffect(() => {
-    const fecthBlurhash = async () => {
-      await runBlurhashJob();
-      console.log("Done");
-    };
-    fecthBlurhash();
-  }, [data, loading]);
-  if (data.length === 0) {
+
+  if (data.length === 0 && !loading) {
     return (
       <div className="w-full px-6 flex flex-col grid-result   ">
         An error occured

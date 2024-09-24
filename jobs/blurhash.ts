@@ -66,6 +66,7 @@ const generateBlurHash = async (imageUrl: string) => {
   }
 };
 const fetchImagesAndGenerateBlurhash = async () => {
+  // const unFetchedQueries
   const randomIndex = Math.floor(Math.random() * searchKeyWords.length);
   const query = searchKeyWords[randomIndex];
   console.log("query", query);
@@ -89,7 +90,7 @@ const fetchImagesAndGenerateBlurhash = async () => {
         return photo;
       })
     );
-    const cacheKey = `photos:${query === "" ? "all" : query}:${1}`;
+    const cacheKey = `photos:${query === "" ? "all" : query}:${1}:filters:relevance`;
 
     const updatedPhotos = formatImageData(blurHashedPhotos);
     await redisClient.set(cacheKey, JSON.stringify(updatedPhotos), {
@@ -126,14 +127,16 @@ const getAllQueries = async () => {
   // return searchKeyWords;
 };
 
-export const runBlurhashJob = async () => {
-  console.log("Connecting to Redis");
+export const runBlurhashJob = async (runNumber = 3) => {
   await connectToRedis();
-
-  console.log("Running cron job to generate blurhashes");
   await getAllQueries();
+
   console.log("Search keywords", searchKeyWords);
-  await fetchImagesAndGenerateBlurhash();
+  while (runNumber > 0) {
+    await fetchImagesAndGenerateBlurhash();
+    runNumber--;
+    console.log("Run number", runNumber);
+  }
   console.log("Completed cron job to generate blurhashes");
   return true;
 };
