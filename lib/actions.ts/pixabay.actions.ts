@@ -31,7 +31,7 @@ export const getPixabayPhotos = async ({
   };
 }) => {
   const order = filters?.order || "popular";
- 
+
   const pixabayUrl = query
     ? `https://pixabay.com/api/?key=${pixabayApiKey}&q=${query}&image_type=photo&pretty=true&per_page=${perPage}&page=${page}&order=${order}`
     : `https://pixabay.com/api/?key=${pixabayApiKey}&image_type=photo&pretty=true&per_page=${perPage}&page=${page}&order=${order}`;
@@ -43,7 +43,7 @@ export const getPixabayPhotos = async ({
       throw new Error("Failed to fetch Pexels photos");
     }
     const data = await response.json();
-
+    console.log(data.hits[0]);
     const photo: Photo[] = data.hits.map((photo: PixabayPhoto): Photo => {
       const slug =
         photo.pageURL.split("https://pixabay.com/photos/").pop() || "";
@@ -59,7 +59,7 @@ export const getPixabayPhotos = async ({
         author: photo.user,
         author_url: photo.userImageURL,
         likes: 0,
-        provider: "PixaBay",
+        provider: "pixaBay",
         provider_logo: pixabaylogo,
         provider_url: "https://pixabay.com/",
       };

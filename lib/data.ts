@@ -120,4 +120,25 @@ export const filters = [
       },
     ],
   },
+  {
+    title: "Provider",
+    values: [
+      {
+        name: "Freepik",
+        value: "freepik",
+      },
+      {
+        name: "Pexels",
+        value: "pexels",
+      },
+      {
+        name: "Unsplash",
+        value: "unsplash",
+      },
+      {
+        name: "Pixabay",
+        value: "pixabay",
+      },
+    ],
+  },
 ];

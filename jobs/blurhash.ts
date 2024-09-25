@@ -5,7 +5,7 @@ import { Photo } from "@/types";
 
 import sharp from "sharp";
 import { formatImageData } from "@/lib/utils";
-import { redisClient, connectToRedis } from "@/lib/redis";
+import { redisClient, connectToRedis, disconnectFromRedis } from "@/lib/redis";
 
 let searchKeyWords = ["all", "nature", "city", "food", "people", "technology"];
 
@@ -67,6 +67,7 @@ const generateBlurHash = async (imageUrl: string) => {
 };
 const storeUsedKeyword = async (keyword: string) => {
   await redisClient.sAdd("usedKeywords", keyword);
+  await redisClient.expire("usedKeywords", 10800);
 };
 
 const getUnusedKeywords = async () => {
@@ -107,7 +108,7 @@ const fetchImagesAndGenerateBlurhash = async () => {
     );
     const cacheKey = `photos:${
       keyword === "" ? "all" : keyword
-    }:${1}:filters:relevance`;
+    }:${1}:filters:all:relevance`;
 
     const updatedPhotos = formatImageData(blurHashedPhotos);
     await redisClient.set(cacheKey, JSON.stringify(updatedPhotos), {
@@ -155,6 +156,7 @@ export const runBlurhashJob = async (runNumber = 3) => {
     runNumber--;
     console.log("Run number", runNumber);
   }
+
   console.log("Completed cron job to generate blurhashes");
   return true;
 };

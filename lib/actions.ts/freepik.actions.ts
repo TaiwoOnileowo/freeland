@@ -67,7 +67,7 @@ export const getFreepikPhotos = async ({
         author: photo.author.name,
         author_url: photo.author.avatar,
         likes: 0,
-        provider: "Freepik",
+        provider: "freepik",
         provider_logo: freepiklogo,
         provider_url: " https://www.freepik.com/",
       };

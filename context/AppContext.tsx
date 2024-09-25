@@ -8,6 +8,7 @@ export const AppProvider: React.FC<{
   children: React.ReactNode;
 }> = ({ children }) => {
   const [photoQuery, setPhotoQuery] = useState<Photo | null>(null);
+
   return (
     <AppContext.Provider
       value={{

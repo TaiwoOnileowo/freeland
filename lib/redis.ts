@@ -8,14 +8,21 @@ const redisClient = createClient({
   },
 });
 
-redisClient.on('error', (err) => console.log('Redis Client Error', err));
+redisClient.on("error", (err) => console.log("Redis Client Error", err));
 
 const connectToRedis = async () => {
-  console.log('Connecting to Redis');
+  console.log("Connecting to Redis");
   if (!redisClient.isOpen) {
     await redisClient.connect();
-    console.log('Connected to Redis');
+    console.log("Connected to Redis");
+  }
+};
+const disconnectFromRedis = async () => {
+  console.log("Disconnecting from Redis");
+  if (redisClient.isOpen) {
+    await redisClient.disconnect();
+    console.log("Disconnected from Redis");
   }
 };
 
-export { redisClient, connectToRedis };
+export { redisClient, connectToRedis, disconnectFromRedis };

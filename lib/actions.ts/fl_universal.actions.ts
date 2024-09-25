@@ -7,7 +7,7 @@ import { getPixabayPhotos } from "./pixabay.actions";
 import { getPexelsPhotos } from "./pexels.actions";
 import { formatImageData } from "../utils";
 
-import { redisClient, connectToRedis } from "../redis";
+import { redisClient, connectToRedis, disconnectFromRedis } from "../redis";
 export const fetchPhotosFromApi = async ({
   page,
   perPage,
@@ -18,7 +18,7 @@ export const fetchPhotosFromApi = async ({
   page: number;
   perPage: number;
   query: string;
-  filters?: { order: string };
+  filters?: { order: string; provider: string };
 }) => {
   const controller = new AbortController();
   const signal = controller.signal;
@@ -47,13 +47,33 @@ export const fetchPhotosFromApi = async ({
       filters,
     });
     if (!signal.aborted) {
-      const combinedData = [
-        ...freePikData,
-        ...pexelsData,
-        ...unsplashData,
-        ...pixabayData,
-      ];
-      const formattedData = formatImageData(combinedData);
+      let data: Photo[] = [];
+      const providers = filters?.provider.split(",");
+      providers?.forEach((provider) => {
+        if (provider === "freepik") {
+          data = data.concat(freePikData);
+        }
+        if (provider === "pexels") {
+          data = data.concat(pexelsData);
+        }
+        if (provider === "unsplash") {
+          data = data.concat(unsplashData);
+        }
+        if (provider === "pixabay") {
+          data = data.concat(pixabayData);
+        }
+        if (provider === "all") {
+          data = data.concat(
+            freePikData,
+            pexelsData,
+            unsplashData,
+            pixabayData
+          );
+          console.log("all", data);
+        }
+      });
+
+      const formattedData = formatImageData(data);
 
       return formattedData;
     }
@@ -76,11 +96,18 @@ export const getPhotos = async ({
   page: number;
   perPage: number;
   query: string;
-  filters?: { order: string };
+  filters?: { order: string; provider: string };
 }) => {
   connectToRedis();
   const order = filters?.order || "relevance";
-  const cacheKey = `photos:${query === "" ? "all" : query}:${page}:filters:${order}`;
+  let provider = filters?.provider || "all";
+  const arrayOfProviders = provider.split(",");
+  if (arrayOfProviders.length === 4) {
+    provider = "all";
+  }
+  const cacheKey = `photos:${
+    query === "" ? "all" : query
+  }:${page}:filters:${provider}:${order}`;
 
   const cachedData = await redisClient.get(cacheKey);
   if (cachedData) {
@@ -95,8 +122,10 @@ export const getPhotos = async ({
     query,
     filters,
   });
-
+  if (data.length === 0) {
+    return [];
+  }
   await redisClient.set(cacheKey, JSON.stringify(data), { EX: 10800 });
-
+ 
   return data;
 };

@@ -1,10 +1,10 @@
-"use client";
 import Navbar from "@/components/Navbar";
-import React, { useState } from "react";
-import FiltersHeader from "@/components/Search/FiltersHeader";
+import React from "react";
+
 import SearchContainer from "@/components/Search/SearchContainer";
-import Filters from "@/components/Search/Filters";
+
 import SearchHeader from "@/components/Search/SearchHeader";
+import FiltersContainer from "@/components/Search/FiltersContainer";
 
 const Page = ({
   searchParams,
@@ -13,15 +13,14 @@ const Page = ({
     query: string;
     kingdom: string;
     order: string;
+    pr: string;
   };
 }) => {
-  const { query, kingdom, order } = searchParams;
-  const [showFilters, setShowFilters] = useState(false);
-  const handleToggleFilters = () => {
-    setShowFilters(!showFilters);
-  };
+  const { query, kingdom, order, pr } = searchParams;
+
   const filters = {
     order,
+    provider: pr || "all",
   };
 
   return (
@@ -30,12 +29,12 @@ const Page = ({
       <SearchHeader query={query} key={query} activeKingdom={kingdom} />
       <div className="grid-container ">
         <hr className="border-b-[0.5px] border-b-gray-300 w-full mt-2" />
-        <FiltersHeader
-          showFilters={showFilters}
-          onToggleFilters={handleToggleFilters}
+        <FiltersContainer />
+        <SearchContainer
+          activeKingdom={kingdom}
+          query={query}
+          filters={filters}
         />
-        {showFilters && <Filters />}
-        <SearchContainer activeKingdom={kingdom} query={query} filters={filters} />
       </div>
     </div>
   );

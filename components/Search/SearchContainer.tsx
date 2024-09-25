@@ -7,6 +7,7 @@ import Pagination from "../Pagination";
 import { getPhotos } from "@/lib/actions.ts/fl_universal.actions";
 import { useAppContext } from "@/context";
 import ImageResults from "./ImageResults";
+import { formatImageData } from "@/lib/utils";
 
 const SearchContainer = ({
   query = "",
@@ -15,10 +16,10 @@ const SearchContainer = ({
 }: {
   query?: string;
   activeKingdom: string;
-  filters?: { order: string };
+  filters?: { order: string; provider: string };
 }) => {
   const lowercaseActiveKingdom = activeKingdom.toLowerCase();
-  console.log(lowercaseActiveKingdom, "lowercaseActiveKingdom", query, "query");
+
   const { page, totalPages, perPage, handleNextPage, handlePreviousPage } =
     usePagination();
   const [data, setData] = useState<Photo[][]>([]);
@@ -29,11 +30,9 @@ const SearchContainer = ({
       setLoading(true);
       if (lowercaseActiveKingdom === "images") {
         const photos = await getPhotos({ page, perPage, query, filters });
-
         setData(photos);
-
-        setLoading(false);
       }
+      setLoading(false);
     };
     fetchData();
   }, [page, perPage, query, lowercaseActiveKingdom, filters]);
@@ -45,6 +44,7 @@ const SearchContainer = ({
       </div>
     );
   }
+  console.log(data);
   return (
     <div className="w-full px-6 flex flex-col grid-result   ">
       {lowercaseActiveKingdom === "images" && (

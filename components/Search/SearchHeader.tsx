@@ -6,9 +6,11 @@ import { motion } from "framer-motion";
 const SearchHeader = ({
   query,
   activeKingdom,
+ 
 }: {
   query: string;
   activeKingdom: string;
+  
 }) => {
   const [scrollPosition, setScrollPosition] = useState(0);
 

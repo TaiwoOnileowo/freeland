@@ -72,7 +72,7 @@ export const getUnsplashPhotos = async ({
       author: photo.user.name,
       author_url: photo.user.links.html,
       likes: 0,
-      provider: "Unsplash",
+      provider: "unsplash",
       provider_logo: unsplashlogo,
       provider_url: "https://unsplash.com/",
     }));

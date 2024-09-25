@@ -16,6 +16,7 @@ interface PexelPhoto {
   photographer_url: string;
   src: {
     original: string;
+    medium: string;
   };
   alt?: string;
 }
@@ -45,7 +46,7 @@ export const getPexelsPhotos = async ({
       throw new Error("Failed to fetch Pexels photos");
     }
     const data = await response.json();
-
+  
     const photo: Photo[] = data.photos.map((photo: PexelPhoto) => {
       const slug =
         photo.url.split("https://www.pexels.com/photo/").pop() ??
@@ -55,14 +56,14 @@ export const getPexelsPhotos = async ({
         id: photo.id.toString(),
         width: photo.width,
         height: photo.height,
-        url: photo.src.original,
+        url: photo.src.medium,
         blur_hash: "",
         alt: photo.alt ?? slug,
         freeland_url: `/images/${slug}`,
         author: photo.photographer,
         author_url: photo.photographer_url,
         likes: 0,
-        provider: "Pexels",
+        provider: "pexels",
         provider_logo: pexelslogo,
         provider_url: "https://www.pexels.com/",
       };

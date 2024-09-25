@@ -71,7 +71,7 @@ const FreelandImage = ({ photo, index }: { photo: Photo; index: number }) => {
                   className="rounded-full"
                 />
               </span>
-              <span>{photo.provider}</span>
+              <span className="capitalize">{photo.provider}</span>
             </p>
             <span
               className="bg-white text-black absolute top-2 right-2 z-[20] hover:bg-gray-100 rounded-md w-8 h-8 flex items-center justify-center text-sm"
