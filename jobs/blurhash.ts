@@ -65,16 +65,31 @@ const generateBlurHash = async (imageUrl: string) => {
     return null;
   }
 };
+const storeUsedKeyword = async (keyword: string) => {
+  await redisClient.sAdd("usedKeywords", keyword);
+};
+
+const getUnusedKeywords = async () => {
+  const usedKeywords = await redisClient.sMembers("usedKeywords"); // Get all used keywords
+  const unusedKeywords = searchKeyWords.filter(
+    (keyword) => !usedKeywords.includes(keyword)
+  );
+  return unusedKeywords.length > 0 ? unusedKeywords : []; // Return only unused keywords
+};
 const fetchImagesAndGenerateBlurhash = async () => {
-  // const unFetchedQueries
-  const randomIndex = Math.floor(Math.random() * searchKeyWords.length);
-  const query = searchKeyWords[randomIndex];
-  console.log("query", query);
+  const unusedKeywords = await getUnusedKeywords();
+  if (unusedKeywords.length === 0) {
+    console.log("All keywords have been processed");
+    return;
+  }
+  const randomIndex = Math.floor(Math.random() * unusedKeywords.length);
+  const keyword = unusedKeywords[randomIndex];
+  console.log("Processing keyword:", keyword);
   try {
     const quarteredData = await getPhotos({
       page: 1,
       perPage: 30,
-      query,
+      query: keyword,
     });
 
     const data = quarteredData.flat();
@@ -90,12 +105,15 @@ const fetchImagesAndGenerateBlurhash = async () => {
         return photo;
       })
     );
-    const cacheKey = `photos:${query === "" ? "all" : query}:${1}:filters:relevance`;
+    const cacheKey = `photos:${
+      keyword === "" ? "all" : keyword
+    }:${1}:filters:relevance`;
 
     const updatedPhotos = formatImageData(blurHashedPhotos);
     await redisClient.set(cacheKey, JSON.stringify(updatedPhotos), {
       EX: 10800,
     });
+    await storeUsedKeyword(keyword);
   } catch (error) {
     console.error("Error fetching images or generating blurhash:", error);
   }

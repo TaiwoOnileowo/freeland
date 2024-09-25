@@ -94,7 +94,6 @@ const FiltersHeader = ({
             <SelectContent>
               <SelectItem value="relevance">Most Relevant</SelectItem>
               <SelectItem value={"latest"}>Latest</SelectItem>
-              <SelectItem value={"popular"}>Most Popular</SelectItem>
             </SelectContent>
           </Select>
         </div>

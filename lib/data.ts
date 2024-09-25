@@ -106,3 +106,18 @@ export const imageCategories = [
     links: ["Independence Day", "Nature", "Ai", "Pilot", "Business Culture"],
   },
 ];
+export const filters = [
+  {
+    title: "Sort by",
+    values: [
+      {
+        name: "Most Relevant",
+        value: "relevance",
+      },
+      {
+        name: "Latest",
+        value: "latest",
+      },
+    ],
+  },
+];

@@ -45,6 +45,7 @@ export const getFreepikPhotos = async ({
       },
       signal,
     });
+
     if (!response.ok) {
       throw new Error("Failed to fetch Freepik photos");
     }
